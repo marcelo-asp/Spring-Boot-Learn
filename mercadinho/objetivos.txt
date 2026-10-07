@@ -1,0 +1,19 @@
+CRUD
+ │
+ ├── (X) 1. DTOs
+ │
+ ├── () 2. Tratamento de erros
+ │
+ ├── () 3. Validação
+ │
+ ├── () 4. Paginação + filtros
+ │
+ ├── () 5. Relacionamentos
+ │
+ ├── () 6. Autenticação
+ │
+ ├── () 7. Autorização
+ │
+ ├── () 8. Testes
+ │
+ └── () 9. Documentação com Swagger/OpenAPI
