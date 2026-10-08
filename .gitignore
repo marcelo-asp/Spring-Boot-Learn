@@ -1,8 +1,11 @@
-HELP.md
+mercadinho/HELP.md
 target/
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+
+# H2 database
+/data
 
 ### STS ###
 .apt_generated

@@ -1,6 +1,8 @@
 package br.com.java_lerning.mercadinho.service;
 
 import br.com.java_lerning.mercadinho.dto.ProdutoDTO;
+import br.com.java_lerning.mercadinho.exception.ProdutoCreationException;
+import br.com.java_lerning.mercadinho.exception.ProdutoNotFoundException;
 import br.com.java_lerning.mercadinho.model.Produto;
 import br.com.java_lerning.mercadinho.repository.ProdutoRepository;
 import br.com.java_lerning.mercadinho.util.EntityConverter;
@@ -19,12 +21,12 @@ public class ProdutoService {
     @Autowired
     private ProdutoRepository produtoRepository;
 
-    //cria um produto e salva no banco
-    public ProdutoDTO saveBD(ProdutoDTO produtoDTO){
+
+    public ProdutoDTO save(ProdutoDTO produtoDTO){
 
         //Valida se algum campo está vazio e retorna uma execeção de argumento ilegal
         if(produtoDTO.nome() == null || produtoDTO.quantidade() <= 0 || produtoDTO.valor() == null || produtoDTO.dataExpiracao() == null){
-            throw new IllegalArgumentException("Os campos precisam ser válidos, por favor preencher corretamente");
+            throw new ProdutoCreationException("Os campos precisam ser válidos, por favor preencher corretamente");
         }
 
         Produto produto = EntityConverter.toEntity(produtoDTO);
@@ -32,10 +34,9 @@ public class ProdutoService {
         return EntityConverter.toDTO(produtoRepository.save(produto));
     }
 
-    //busca produto pelo id
     public Produto findById(UUID id){
             Optional<Produto> produtoOptional = produtoRepository.findById(id);
-            return produtoOptional.orElseThrow(() -> new RuntimeException("Produto não encontrado"));
+            return produtoOptional.orElseThrow(() -> new ProdutoNotFoundException("Produto não encontrado"));
     }
 
     //busca todos os produtos
@@ -47,11 +48,10 @@ public class ProdutoService {
 
     }
 
-    //FAZER UM JEITO DE VERIFICAR A DATA POSI PRECISA DO DIA E MES COM DOIS DIGITOS!!!
     public Produto update(UUID id, ProdutoDTO produtoAtualizado){
 
         Produto produto = produtoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
+                .orElseThrow(() -> new ProdutoNotFoundException("Produto não encontrado"));
 
         produto.setValor(produtoAtualizado.valor());
         produto.setNome(produtoAtualizado.nome());
@@ -61,14 +61,13 @@ public class ProdutoService {
         return produtoRepository.save(produto);
     }
 
-    //deleta pelo id
     public void deleteById(UUID id){
             Optional<Produto> optionalProduto = produtoRepository.findById(id);
             if(optionalProduto.isPresent()){
                 produtoRepository.deleteById(id);
             }
             else  {
-                throw new RuntimeException("Produto não encontrado");
+                throw new ProdutoNotFoundException("Produto não encontrado");
             }
     }
 }
